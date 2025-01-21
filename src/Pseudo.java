@@ -57,10 +57,19 @@ class Game {
     // Méthode pour afficher la liste des joueurs
     public void afficherJoueurs() {
         System.out.println("Liste des joueurs enregistrés :");
+
+
+        int count = 0;
         for (Pseudo joueur : listeJoueurs) {
             System.out.println("- " + joueur);
+            count++;
+
+            if (count >= 10) {
+                break;
+            }
         }
     }
+
 
     // Méthode pour ajouter une victoire à un joueur
     public void ajouterVictoire(String pseudo) {
