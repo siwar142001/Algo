@@ -42,22 +42,18 @@ class Pseudo {
 class Game {
     private List<Pseudo> listeJoueurs = new LinkedList<>();
 
-    // Méthode pour enregistrer un joueur
-    public void enregistrementPseudo() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Entrez votre pseudo : ");
-        String pseudo = scanner.nextLine();
 
+
+    // Méthode pour enregistrer un joueur (avec pseudo passé en paramètre)
+    public void enregistrerPseudo(String pseudo) {
         Pseudo joueur = new Pseudo(pseudo);
         listeJoueurs.add(joueur);
-
         System.out.println("Bienvenue, " + joueur + "! Votre pseudo a été enregistré.");
     }
 
     // Méthode pour afficher la liste des joueurs
-    public void afficherJoueurs() {
-        System.out.println("Liste des joueurs enregistrés :");
-
+    public void afficherJoueurs(Scanner scanner) {
+        System.out.println("\nListe des joueurs enregistrés :");
 
         int count = 0;
         for (Pseudo joueur : listeJoueurs) {
@@ -68,28 +64,8 @@ class Game {
                 break;
             }
         }
-    }
-
-
-    // Méthode pour ajouter une victoire à un joueur
-    public void ajouterVictoire(String pseudo) {
-        for (Pseudo joueur : listeJoueurs) {
-            if (joueur.pseudo.equals(pseudo)) {
-                joueur.ajouterVictoire();
-                System.out.println("Victoire ajoutée pour " + pseudo);
-                return;
-            }
-        }
-        System.out.println("Joueur non trouvé !");
-    }
-
-    public static void main(String[] args) {
-        Game game = new Game();
-
-        game.enregistrementPseudo();
-        game.enregistrementPseudo();
-
-        game.ajouterVictoire("Alice");
-        game.afficherJoueurs();
+        System.out.println("Appuyez sur Entrée pour revenir au menu principal...");
+        scanner.nextLine();
     }
 }
+
