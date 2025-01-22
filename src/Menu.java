@@ -1,4 +1,4 @@
-import java.util.Scanner;
+import java.util.Scanner; // Import la classe scaner pour lire les entrés de l'utilisateur
 
 public class Menu {
     // Affiche le menu principale et c'est option
@@ -82,6 +82,7 @@ public class Menu {
         }
     }
 
+    // Méthode pour la page "Règle"
     public static void Règle(Scanner scanner) {
         int choix = 0;
 
