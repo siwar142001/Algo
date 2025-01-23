@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Menu {
@@ -13,6 +14,7 @@ public class Menu {
         System.out.print("Entrez votre choix : ");
     }
 
+    // Point d'entré du programme
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in); // Permet de lire l'entrée utilisateur
         int choix = 0; // Variable pour stocker le choix de l'utilisateur
@@ -63,13 +65,13 @@ public class Menu {
 
                 switch (choix) {
                     case 1:
-                        enregistrerJoueurs(2, scanner); // Enregistre 2 joueurs
+                        lancerJeu(2, scanner); // Démarre une partie avec 2 joueurs
                         return;
                     case 2:
-                        enregistrerJoueurs(3, scanner); // Enregistre 3 joueurs
+                        lancerJeu(3, scanner); // Démarre une partie avec 3 joueurs
                         return;
                     case 3:
-                        enregistrerJoueurs(4, scanner); // Enregistre 4 joueurs
+                        lancerJeu(4, scanner); // Démarre une partie avec 4 joueurs
                         return;
                     case 4:
                         return; // Retourner au menu principal
@@ -82,9 +84,10 @@ public class Menu {
         }
     }
 
-    // Méthode pour enregistrer les joueurs
-    public static void enregistrerJoueurs(int nombreDeJoueurs, Scanner scanner) {
+    public static void lancerJeu(int nombreDeJoueurs, Scanner scanner) {
+        // Enregistre les joueurs
         System.out.println("\nEnregistrement des joueurs (" + nombreDeJoueurs + " joueurs) :");
+        ArrayList<Joueur> joueurs = new ArrayList<>();
 
         for (int i = 1; i <= nombreDeJoueurs; i++) {
             String pseudo;
@@ -93,21 +96,41 @@ public class Menu {
                 pseudo = scanner.nextLine();
 
                 if (pseudo.length() <= 10 && pseudo.length() >= 2) {
-                    game.enregistrerPseudo(pseudo); // Enregistre le pseudo s'il est valide
-                    break; // Sortie de la boucle si le pseudo est conforme
+                    // Assigner une couleur différente à chaque joueur
+                    String couleur = switch (i) {
+                        case 1 -> "\033[1;31m"; // Rouge
+                        case 2 -> "\033[1;34m"; // Bleu
+                        case 3 -> "\033[1;33m"; // Jaune
+                        case 4 -> "\033[1;32m"; // Vert
+                        default -> "\033[1;37m"; // Blanc
+                    };
+
+                    // Position de départ pour chaque joueur
+                    int x = 2 + i; // Exemple d'initialisation simple
+                    int y = 2 + i;
+                    joueurs.add(new Joueur(i, couleur, x, y)); // Crée un joueur et l'ajoute à la liste
+                    break;
                 } else {
                     System.out.println("Veuillez respectez les conditions sinon jte bute");
                 }
             }
         }
-        System.out.println("Tous les joueurs ont été enregistrés !");
-    }
 
+        // Initialiser la grille et ajouter les joueurs
+        Grille grille = new Grille();
+        for (Joueur joueur : joueurs) {
+            grille.ajouterJoueur(joueur);
+        }
+
+        // Lancer la partie
+        System.out.println("Tous les joueurs ont été enregistrés ! La partie commence !");
+        grille.jouer();
+    }
 
     // Méthode pour afficher les règles du jeu
     public static void afficherRegles(Scanner scanner) {
-        System.out.println("Règle du Jeu");
-        System.out.println("\n\nLes règles du jeu sont simples, " +
+        System.out.println("\n\nRègle du Jeu");
+        System.out.println("\nLes règles du jeu sont simples, " +
                 "\nvous avez un carré qui peut se déplacer sur une surface 10x11, " +
                 "\nvous pouvez poser des blocs. " +
                 "\nVotre but est de bloquer votre adversaire en posant ces blocs. " +
