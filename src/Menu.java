@@ -5,7 +5,7 @@ public class Menu {
 
     // Affiche le menu principal et ses options
     public static void afficherMenu() {
-        System.out.println("\nDetructible Chess");
+        System.out.println("\nDestroyer of Limit");
         System.out.println("1. Nouvelle partie");
         System.out.println("2. Règle");
         System.out.println("3. Score");
@@ -107,14 +107,15 @@ public class Menu {
     // Méthode pour afficher les règles du jeu
     public static void afficherRegles(Scanner scanner) {
         System.out.println("\n\nRègle du Jeu");
-        System.out.println("\nLes règles du jeu sont simples, " +
-                "\nvous avez un carré qui peut se déplacer sur une surface 10x11, " +
-                "\nvous pouvez poser des blocs. " +
-                "\nVotre but est de bloquer votre adversaire en posant ces blocs. " +
-                "\nVous ne pouvez avancer sur un bloc qui à été posé par un joueur. " +
-                "\nVous ne pouvez vous déplacer que horizontalement ou verticalement. " +
-                "\nVous ne pouvez pas foncer dans un mur. Une fois que tous vos adversaires ont été bloqués, " +
-                "\nvous avez gagné la partie.");
+        System.out.println("\nLes règles du jeu sont simples :" +
+                "\nVous contrôlez un carré qui peut se déplacer sur une surface de 10x11 cases." +
+                "\nVous avez la possibilité de poser des blocs pour entraver vos adversaires." +
+                "\nLe but est de bloquer tous vos adversaires en utilisant ces blocs stratégiquement." +
+                "\n\nQuelques règles importantes :" +
+                "\n     1. Vous ne pouvez pas avancer sur un bloc posé par un joueur." +
+                "\n     2. Les déplacements sont limités aux directions horizontale et verticale." +
+                "\n     3. Vous ne pouvez pas traverser ou foncer dans un mur." +
+                "\nLa partie est remportée une fois que tous vos adversaires sont bloqués et ne peuvent plus se déplacer.");
         System.out.println("\nAppuyez sur Entrée pour revenir au menu principal...");
         scanner.nextLine(); // Attente d'une entrée pour revenir au menu
     }
