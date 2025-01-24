@@ -3,6 +3,10 @@ import java.util.Scanner;
 
 public class Menu {
     private static Game game = new Game(); // Instance de Game
+    private static final String FICHIER_RESULTATS = "resultats.txt"; // Nom du fichier pour sauvegarder les résultats
+    
+    
+
 
     // Affiche le menu principal et ses options
     public static void afficherMenu() {
@@ -17,35 +21,52 @@ public class Menu {
     // Point d'entré du programme
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in); // Permet de lire l'entrée utilisateur
+
+        System.out.println("Chargement des résultats depuis le fichier : " + FICHIER_RESULTATS);
+
+        game.testPartieEtSauvegarde();
+         // Charger les résultats au démarrage
+        game.chargerResultats(FICHIER_RESULTATS);
+
         int choix = 0; // Variable pour stocker le choix de l'utilisateur
 
         // Boucle principale du menu
         while (choix != 4) {
             afficherMenu();
-
-            try {
-                choix = Integer.parseInt(scanner.nextLine()); // Lecture de l'entrée utilisateur
-                switch (choix) {
-                    case 1: // Nouvelle partie
-                        nouvellePartie(scanner);
-                        break;
-                    case 2: // Règles du jeu
-                        afficherRegles(scanner);
-                        break;
-                    case 3: // Afficher les scores
-                        game.afficherJoueurs(scanner);
-                        break;
-                    case 4: // Quitter
-                        System.out.println("Merci d'avoir joué ! À bientôt !");
-                        break;
-                    default:
-                        System.out.println("Ce choix n'existe pas ! Veuillez choisir une option valide !");
+        
+            if (scanner.hasNextLine()) { // Vérifie s'il y a une entrée utilisateur
+                try {
+                    choix = Integer.parseInt(scanner.nextLine()); // Lecture de l'entrée utilisateur
+                    switch (choix) {
+                        case 1: // Nouvelle partie
+                            nouvellePartie(scanner);
+                            game.sauvegarderResultats(FICHIER_RESULTATS);
+                            break;
+                        case 2: // Règles du jeu
+                            afficherRegles(scanner);
+                            break;
+                        case 3: // Afficher les scores
+                            game.afficherJoueurs(scanner);
+                            break;
+                        case 4: // Quitter
+                            System.out.println("Sauvegarde des résultats en cours...");
+                            game.sauvegarderResultats(FICHIER_RESULTATS);
+                            System.out.println("Merci d'avoir joué !");
+                            scanner.close();
+                            break;
+                        default:
+                            System.out.println("Choix invalide ! Veuillez réessayer.");
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("Entrée invalide. Veuillez entrer un nombre.");
                 }
-            } catch (NumberFormatException e) {
-                System.out.println("Entrée invalide. Veuillez entrer un nombre.");
+            } else {
+                System.out.println("Aucune entrée détectée. Arrêt du programme.");
+                break;
             }
         }
-        scanner.close();
+       
+        
     }
 
     // Méthode pour gérer une nouvelle partie

@@ -1,6 +1,8 @@
+
 import java.util.Scanner;
 import java.util.LinkedList;
 import java.util.List;
+import java.io.*;
 
 
 
@@ -15,9 +17,14 @@ class Pseudo {
     // Constructeur pour initialiser le pseudo
     Pseudo(String pseudo) {
         this.pseudo = pseudo;
-        this.victoires = 0;
-        this.defaites = 0;
-        this.partiesJouees = 0;
+        
+    }
+
+    Pseudo(String pseudo, int victoires, int defaites, int partiesJouees) {
+        this.pseudo = pseudo;
+        this.victoires = victoires;
+        this.defaites = defaites;
+        this.partiesJouees = partiesJouees;
     }
 
 
@@ -50,6 +57,94 @@ class Pseudo {
 
 class Game {
     private List<Pseudo> listeJoueurs = new LinkedList<>();
+
+    public void testPartieEtSauvegarde() {
+        // Simulation d'une partie
+        System.out.println("Le joueur 1 (J1) a gagné !");
+        ajouterResultatPartie("Joueur 1", 1, 0, 1); // Ajouter le résultat du joueur 1
+        ajouterResultatPartie("Joueur 2", 0, 1, 1); // Ajouter le résultat du joueur 2
+
+        // Sauvegarder les résultats
+        sauvegarderResultats("resultats.txt");
+
+        // Charger et afficher les résultats
+        chargerResultats("resultats.txt");
+    }
+
+    // Ajouter les résultats d'une partie dans la liste des joueurs
+    public void ajouterResultatPartie(String pseudo, int victoires, int defaites, int partiesJouees) {
+        Pseudo joueur = new Pseudo(pseudo);
+        joueur.victoires = victoires;
+        joueur.defaites = defaites;
+        joueur.partiesJouees = partiesJouees;
+        listeJoueurs.add(joueur);  // Ajoute le joueur à la liste
+        System.out.println("Résultats de " + pseudo + " ajoutés à la liste.");
+    }
+
+    // Sauvegarder les résultats dans le fichier
+    public void sauvegarderResultats(String fichier) {
+        try (FileWriter writer = new FileWriter(fichier)) {
+            if (listeJoueurs.isEmpty()) {
+                System.out.println("Aucun joueur à sauvegarder.");
+                return;
+            }
+
+            for (Pseudo joueur : listeJoueurs) {
+                writer.write(joueur.pseudo + ";" + joueur.victoires + ";" +
+                             joueur.defaites + ";" + joueur.partiesJouees + "\n");
+            }
+            System.out.println("Les résultats ont été sauvegardés dans le fichier : " + fichier);
+        } catch (IOException e) {
+            System.out.println("Erreur lors de la sauvegarde des résultats : " + e.getMessage());
+        }
+    }
+
+
+    // Charger les résultats depuis le fichier
+    public void chargerResultats(String fichier) {
+        File file = new File(fichier);
+        if (!file.exists()) {
+            System.out.println("Le fichier " + fichier + " n'existe pas encore. Aucune donnée chargée.");
+            return;
+        }
+
+        try (Scanner scanner = new Scanner(file)) {
+            System.out.println("test1");
+
+            listeJoueurs.clear(); // Effacer les anciens résultats avant de charger
+
+            while (scanner.hasNextLine()) {
+                System.out.println("test2");
+                String ligne = scanner.nextLine();
+                String[] parts = ligne.split(";");
+                if (parts.length == 4) {
+                    System.out.println("test3");
+                    String pseudo = parts[0];
+                    int victoires = Integer.parseInt(parts[1]);
+                    int defaites = Integer.parseInt(parts[2]);
+                    int partiesJouees = Integer.parseInt(parts[3]);
+                    Pseudo joueur = new Pseudo(pseudo);
+                    joueur.victoires = victoires;
+                    joueur.defaites = defaites;
+                    joueur.partiesJouees = partiesJouees;
+                    listeJoueurs.add(joueur);
+                }
+            }
+
+            System.out.println("Les résultats ont été chargés depuis le fichier : " + fichier);
+
+            // Affichage des résultats chargés
+            for (Pseudo joueur : listeJoueurs) {
+                System.out.println("Joueur : " + joueur.pseudo + ", Victoires : " + joueur.victoires +
+                                   ", Défaites : " + joueur.defaites + ", Parties jouées : " + joueur.partiesJouees);
+            }
+        } catch (IOException | NumberFormatException e) {
+            System.out.println("Erreur lors du chargement des résultats : " + e.getMessage());
+        }
+    }
+    
+    
+    
 
 
     // Méthode pour enregistrer un joueur (avec saisie utilisateur)
@@ -249,4 +344,3 @@ class Game {
         }
     }
 }
-

@@ -1,0 +1,2 @@
+pseudo1;victoires1;defaites1;partiesJouees1;
+pseudo2;victoires2;defaites2;partiesJouees2

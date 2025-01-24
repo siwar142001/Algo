@@ -103,65 +103,65 @@ class Grille {
 
 
     public void jouer() {
-        Scanner scanner = new Scanner(System.in);
+        try (Scanner scanner = new Scanner(System.in)) {
+            while (true) {
+                for (Joueur joueur : joueurs) {
+                    if (!joueur.estActif()) continue;
 
-        while (true) {
-            for (Joueur joueur : joueurs) {
-                if (!joueur.estActif()) continue;
+                    System.out.println("\nTour du joueur " + joueur.getId() + " (" + joueur.getCouleur() + "J" + joueur.getId() + RESET + ")");
+                    afficherGrille();
 
-                System.out.println("\nTour du joueur " + joueur.getId() + " (" + joueur.getCouleur() + "J" + joueur.getId() + RESET + ")");
-                afficherGrille();
+                    System.out.println("Utilisez Z (haut), S (bas), Q (gauche), D (droite) pour vous déplacer :");
+                    char input = scanner.next().toLowerCase().charAt(0);
 
-                System.out.println("Utilisez Z (haut), S (bas), Q (gauche), D (droite) pour vous déplacer :");
-                char input = scanner.next().toLowerCase().charAt(0);
-
-                switch (input) {
-                    case 'z':
-                        joueur.haut(this);
-                        break;
-                    case 's':
-                        joueur.bas(this);
-                        break;
-                    case 'q':
-                        joueur.gauche(this);
-                        break;
-                    case 'd':
-                        joueur.droite(this);
-                        break;
-                    case 'M':
-                        System.out.println("Vous avez débloqué un nouveau mode de jeu !\nVous allez affronter l'ordinateur \nIl est très simple à battre\nune victoire compte dans le tableau des scores\nAlors profitez-en pour tricher sur vos nombre de victoire et vous venter de votre puissance éxtraordinaire !");
-                        break;
-                    default:
-                        System.out.println("Entrée invalide, veuillez réessayer.");
-                        continue;
-                }
-
-                afficherGrille();
-
-                // Demander au joueur de détruire une case
-                boolean caseValide = false;
-                while (!caseValide) {
-                    System.out.println("Choisissez une case à détruire (ligne et colonne) :");
-                    System.out.print("Ligne (1 à " + (LIGNES - 2) + "): ");
-                    int ligneADetruire = scanner.nextInt();
-                    System.out.print("Colonne (1 à " + (COLONNES - 2) + "): ");
-                    int colonneADetruire = scanner.nextInt();
-
-                    if (ligneADetruire > 0 && ligneADetruire < LIGNES - 1 && colonneADetruire > 0 && colonneADetruire < COLONNES - 1) {
-                        if (grille[ligneADetruire][colonneADetruire] == '.') {
-                            grille[ligneADetruire][colonneADetruire] = '#';
-                            System.out.println("Case (" + ligneADetruire + ", " + colonneADetruire + ") détruite.");
-                            caseValide = true;
-                        } else {
-                            System.out.println("Cette case est déjà détruite. Veuillez choisir une autre case.");
-                        }
-                    } else {
-                        System.out.println("Coordonnées invalides. Veuillez réessayer.");
+                    switch (input) {
+                        case 'z':
+                            joueur.haut(this);
+                            break;
+                        case 's':
+                            joueur.bas(this);
+                            break;
+                        case 'q':
+                            joueur.gauche(this);
+                            break;
+                        case 'd':
+                            joueur.droite(this);
+                            break;
+                        case 'M':
+                            System.out.println("Vous avez débloqué un nouveau mode de jeu !\nVous allez affronter l'ordinateur \nIl est très simple à battre\nune victoire compte dans le tableau des scores\nAlors profitez-en pour tricher sur vos nombre de victoire et vous venter de votre puissance éxtraordinaire !");
+                            break;
+                        default:
+                            System.out.println("Entrée invalide, veuillez réessayer.");
+                            continue;
                     }
-                }
 
-                if(estPartieTerminee()){
-                    return;
+                    afficherGrille();
+
+                    // Demander au joueur de détruire une case
+                    boolean caseValide = false;
+                    while (!caseValide) {
+                        System.out.println("Choisissez une case à détruire (ligne et colonne) :");
+                        System.out.print("Ligne (1 à " + (LIGNES - 2) + "): ");
+                        int ligneADetruire = scanner.nextInt();
+                        System.out.print("Colonne (1 à " + (COLONNES - 2) + "): ");
+                        int colonneADetruire = scanner.nextInt();
+
+                        if (ligneADetruire > 0 && ligneADetruire < LIGNES - 1 && colonneADetruire > 0 && colonneADetruire < COLONNES - 1) {
+                            if (grille[ligneADetruire][colonneADetruire] == '.') {
+                                grille[ligneADetruire][colonneADetruire] = '#';
+                                System.out.println("Case (" + ligneADetruire + ", " + colonneADetruire + ") détruite.");
+                                caseValide = true;
+                            } else {
+                                System.out.println("Cette case est déjà détruite. Veuillez choisir une autre case.");
+                            }
+                        } else {
+                            System.out.println("Coordonnées invalides. Veuillez réessayer.");
+                        }
+                    }
+
+                    if(estPartieTerminee()){
+                        return;
+                    }
                 }
             }
         }
