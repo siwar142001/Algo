@@ -1,6 +1,9 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * Classe représentant une grille de jeu pour plusieurs joueurs.
+ */
 class Grille {
 
     // Codes ANSI pour les couleurs
@@ -15,6 +18,10 @@ class Grille {
     private final ArrayList<Joueur> joueurs; // Liste des joueurs
     private final char[][] grille;          // Représentation de la grille
 
+    /**
+     * Constructeur de la classe Grille.
+     * Initialise la grille et ses bordures.
+     */
     public Grille() {
         joueurs = new ArrayList<>();
         grille = new char[LIGNES][COLONNES];
@@ -31,10 +38,18 @@ class Grille {
         }
     }
 
+    /**
+     * Ajoute un joueur à la liste des joueurs.
+     *
+     * @param joueur Le joueur à ajouter.
+     */
     public void ajouterJoueur(Joueur joueur) {
         joueurs.add(joueur);
     }
 
+    /**
+     * Affiche la grille avec les joueurs et les bordures.
+     */
     public void afficherGrille() {
         System.out.print("\033[H\033[2J"); // Effacer l'écran
         System.out.flush();
@@ -64,8 +79,14 @@ class Grille {
         }
     }
 
+    /**
+     * Vérifie si une case est valide pour un déplacement ou non occupée.
+     *
+     * @param x Coordonnée X de la case.
+     * @param y Coordonnée Y de la case.
+     * @return true si la case est valide, false sinon.
+     */
     public boolean estCaseValide(int x, int y) {
-        // Vérifie si la case est un point et n'est pas occupée par un joueur
         if (grille[x][y] != '.') {
             return false;
         }
@@ -77,15 +98,20 @@ class Grille {
         return true;
     }
 
+    /**
+     * Vérifie si la partie est terminée et affiche le gagnant s'il y en a un.
+     *
+     * @return true si la partie est terminée, false sinon.
+     */
     public boolean estPartieTerminee() {
         int joueursActifs = 0;
         Joueur gagnantTemporaire = null;
 
         for (Joueur joueur : joueurs) {
             if (joueur.estActif()) {
-                if (joueur.peutSeDeplacer(this)) {  //pour chaque joueur actif dans la partie //
+                if (joueur.peutSeDeplacer(this)) {
                     joueursActifs++;
-                    gagnantTemporaire = joueur;     //contient le dernier a qui on a verifier la possibilté de se déplacer//
+                    gagnantTemporaire = joueur;
                 } else {
                     joueur.eliminer();
                 }
@@ -101,7 +127,9 @@ class Grille {
         return false;
     }
 
-
+    /**
+     * Gère le déroulement de la partie.
+     */
     public void jouer() {
         try (Scanner scanner = new Scanner(System.in)) {
             while (true) {
@@ -126,9 +154,6 @@ class Grille {
                             break;
                         case 'd':
                             joueur.droite(this);
-                            break;
-                        case 'M':
-                            System.out.println("Vous avez débloqué un nouveau mode de jeu !\nVous allez affronter l'ordinateur \nIl est très simple à battre\nune victoire compte dans le tableau des scores\nAlors profitez-en pour tricher sur vos nombre de victoire et vous venter de votre puissance éxtraordinaire !");
                             break;
                         default:
                             System.out.println("Entrée invalide, veuillez réessayer.");
@@ -159,7 +184,7 @@ class Grille {
                         }
                     }
 
-                    if(estPartieTerminee()){
+                    if (estPartieTerminee()) {
                         return;
                     }
                 }
@@ -167,8 +192,11 @@ class Grille {
         }
     }
 
-
-
+    /**
+     * Méthode principale pour démarrer le jeu.
+     *
+     * @param args Arguments de la ligne de commande (non utilisés).
+     */
     public static void main(String[] args) {
         Grille grille = new Grille();
 
@@ -176,15 +204,16 @@ class Grille {
         grille.ajouterJoueur(new Joueur(1, "\033[1;31m", 5, 5)); // Rouge
         grille.ajouterJoueur(new Joueur(2, "\033[1;34m", 5, 6)); // Bleu
         grille.ajouterJoueur(new Joueur(3, "\033[1;33m", 6, 5)); // Jaune
-        grille.ajouterJoueur(new Joueur(4, "\033[1;35m", 6, 6)); // Rosez
-
-
+        grille.ajouterJoueur(new Joueur(4, "\033[1;35m", 6, 6)); // Rose
 
         // Lancer la partie
         grille.jouer();
     }
 }
 
+/**
+ * Classe représentant un joueur dans la grille.
+ */
 class Joueur {
     private final int id;         // Identifiant du joueur
     private final String couleur; // Couleur du joueur
@@ -192,6 +221,14 @@ class Joueur {
     private int y;                // Position Y du joueur dans la grille
     private boolean actif;        // Indique si le joueur est encore en jeu
 
+    /**
+     * Constructeur de la classe Joueur.
+     *
+     * @param id Identifiant du joueur.
+     * @param couleur Couleur du joueur (code ANSI).
+     * @param x Position initiale X.
+     * @param y Position initiale Y.
+     */
     public Joueur(int id, String couleur, int x, int y) {
         this.id = id;
         this.couleur = couleur;
@@ -200,30 +237,53 @@ class Joueur {
         this.actif = true;
     }
 
+    /**
+     * @return L'identifiant du joueur.
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * @return La position X du joueur.
+     */
     public int getX() {
         return x;
     }
 
+    /**
+     * @return La position Y du joueur.
+     */
     public int getY() {
         return y;
     }
 
+    /**
+     * @return La couleur du joueur.
+     */
     public String getCouleur() {
         return couleur;
     }
 
+    /**
+     * @return true si le joueur est actif, false sinon.
+     */
     public boolean estActif() {
         return actif;
     }
 
+    /**
+     * Élimine le joueur de la partie.
+     */
     public void eliminer() {
         this.actif = false;
     }
 
+    /**
+     * Déplace le joueur vers le haut si possible.
+     *
+     * @param grille La grille de jeu.
+     */
     public void haut(Grille grille) {
         if (x > 1 && grille.estCaseValide(x - 1, y)) {
             x--;
@@ -232,6 +292,11 @@ class Joueur {
         }
     }
 
+    /**
+     * Déplace le joueur vers le bas si possible.
+     *
+     * @param grille La grille de jeu.
+     */
     public void bas(Grille grille) {
         if (x < Grille.LIGNES - 2 && grille.estCaseValide(x + 1, y)) {
             x++;
@@ -240,6 +305,11 @@ class Joueur {
         }
     }
 
+    /**
+     * Déplace le joueur vers la gauche si possible.
+     *
+     * @param grille La grille de jeu.
+     */
     public void gauche(Grille grille) {
         if (y > 1 && grille.estCaseValide(x, y - 1)) {
             y--;
@@ -248,6 +318,11 @@ class Joueur {
         }
     }
 
+    /**
+     * Déplace le joueur vers la droite si possible.
+     *
+     * @param grille La grille de jeu.
+     */
     public void droite(Grille grille) {
         if (y < Grille.COLONNES - 2 && grille.estCaseValide(x, y + 1)) {
             y++;
@@ -256,10 +331,16 @@ class Joueur {
         }
     }
 
+    /**
+     * Vérifie si le joueur peut se déplacer.
+     *
+     * @param grille La grille de jeu.
+     * @return true si le joueur peut se déplacer, false sinon.
+     */
     public boolean peutSeDeplacer(Grille grille) {
-        return (x > 1 && grille.estCaseValide(x - 1, y)) ||  // si on depasse pas la limite de terrain et que la case du dessus est valide //
-                (x < Grille.LIGNES - 2 && grille.estCaseValide(x + 1, y)) ||  // même chose en Bas
-                (y > 1 && grille.estCaseValide(x, y - 1)) ||  // même chose à Gauche
-                (y < Grille.COLONNES - 2 && grille.estCaseValide(x, y + 1));  // même chose à Droite
+        return (x > 1 && grille.estCaseValide(x - 1, y)) ||
+                (x < Grille.LIGNES - 2 && grille.estCaseValide(x + 1, y)) ||
+                (y > 1 && grille.estCaseValide(x, y - 1)) ||
+                (y < Grille.COLONNES - 2 && grille.estCaseValide(x, y + 1));
     }
 }
